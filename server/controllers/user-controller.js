@@ -24,6 +24,27 @@ const UserController = {
         catch(error){
             return res.status(500).json({ message : error.message});
         }
+    },
+    loginUser : async function ( req, res ) {
+        const { userName, password } = req.body;
+        try {
+            let user = await UserModel.findOne({userName}).select('+password');
+            if(!user){
+                return res.status(400).json({ success: false, message: 'User not found!' });
+            }
+            const passwordIsMatch = await bcrypt.compare(password, user.password);
+            if(!passwordIsMatch) {
+                return res.status(400).json({ success: false, message: 'Incorrect password!' });
+            }
+            const token = jwt.sign({ id : user._id}, process.env.JWT_SECRET, { expiresIn : "1h"});
+            res.cookie("accessToken" , token , {httpOnly : true}).status(200).json({
+                userName : user.userName,
+                message : 'User login successful!'
+            });
+        }
+        catch(error){
+            return res.status(500).json({ message : error.message});
+        }
     }
 };
 

@@ -23,6 +23,15 @@ router.post(
   ValidateMiddleware,
   UserController.registerUser
 );
-// router.post("/login", UserController);
+router.post("/login",
+  [
+    body("userName")
+      .notEmpty()
+      .withMessage("Username cannot be empty!")
+      ,
+    body("password")
+      .notEmpty()
+      .withMessage("Password cannot be empty!")
+  ], UserController.loginUser);
 
 module.exports = router;
