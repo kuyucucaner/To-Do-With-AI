@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/slices/user-slice";
-import "../styles/register.css";
+import "../styles/app.css";
 import { Card, Form, Button, Input, Alert, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 const Register = () => {
@@ -23,7 +23,7 @@ const Register = () => {
     navigate("/");
   };
   return (
-    <div className="register-container">
+    <div className="container">
       <Card
         title="Register"
         variant="outlined"
@@ -34,7 +34,7 @@ const Register = () => {
           padding: "30px",
         }}
       >
-        <Form name="basic" style={{ maxWidth: 600 }} onFinish={handleRegister}>
+        <Form name="register" style={{ maxWidth: 600 }} onFinish={handleRegister}>
           <Form.Item
             label="Username"
             name="username"
