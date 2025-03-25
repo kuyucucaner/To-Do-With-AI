@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const RegisterUser = createAsyncThunk(
+export const registerUser = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
     try {
@@ -16,7 +16,7 @@ export const RegisterUser = createAsyncThunk(
     }
   }
 );
-export const LoginUser = createAsyncThunk(
+export const loginUser = createAsyncThunk(
   "user/login",
   async (userData, { rejectWithValue }) => {
     try {
@@ -40,25 +40,25 @@ export const UserSlice = createSlice({
     },
     extraReducers : (builder) => {
         builder
-        .addCase(RegisterUser.pending , (state) => {
+        .addCase(registerUser.pending , (state) => {
             state.loading = true ; 
         })
-        .addCase(RegisterUser.fulfilled , (state, action) => {
+        .addCase(registerUser.fulfilled , (state, action) => {
             state.loading = false ;
             state.user = action.payload ;
         })
-        .addCase(RegisterUser.rejected , (state, action) => {
+        .addCase(registerUser.rejected , (state, action) => {
             state.loading = false ;
             state.error = action.payload ;
         })
-        .addCase(LoginUser.pending , (state) => {
+        .addCase(loginUser.pending , (state) => {
             state.loading = true ; 
         })
-        .addCase(LoginUser.fulfilled , (state, action) => {
+        .addCase(loginUser.fulfilled , (state, action) => {
             state.loading = false ;
             state.user = action.payload ;
         })
-        .addCase(LoginUser.rejected , (state, action) => {
+        .addCase(loginUser.rejected , (state, action) => {
             state.loading = false ;
             state.error = action.payload ;
         })
