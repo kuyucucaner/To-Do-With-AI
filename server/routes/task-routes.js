@@ -7,6 +7,8 @@ const { body } = require("express-validator");
 //Get all tasks
 router.get("/get-tasks", AuthMiddleware, TaskController.getAllTaskByUserId);
 
+router.get("/get-task/:id", AuthMiddleware, TaskController.getTaskById);
+
 //Create a new task
 router.post(
   "/create-task",
@@ -21,11 +23,8 @@ router.post(
       .withMessage("Task description must be provided!")
       .isLength({ max: 255 }),
     body("dueDate")
-      .optional()
-      .isISO8601()
-      .withMessage("Due date must be a valid ISO 8601 date")
-      .isBefore(new Date(), "Due date must be in the past")
-      .withMessage("Due date must be in the past"),
+      .notEmpty()
+      .withMessage("Due date must be provided!"),
     body("tags").isArray({ min: 1 }).withMessage("Task tags cannot be empty!"),
   ],
   ValidateMiddleware,
@@ -46,12 +45,9 @@ router.put(
       .notEmpty()
       .withMessage("Task description must be provided!")
       .isLength({ max: 255 }),
-    body("dueDate")
-      .optional()
-      .isISO8601()
-      .withMessage("Due date must be a valid ISO 8601 date")
-      .isBefore(new Date(), "Due date must be in the past")
-      .withMessage("Due date must be in the past"),
+      body("dueDate")
+      .notEmpty()
+      .withMessage("Due date must be provided!"),
     body("tags")
       .optional()
       .notEmpty()

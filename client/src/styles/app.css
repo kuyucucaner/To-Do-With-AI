@@ -1,4 +1,4 @@
-.register-container{
+.container{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,3 +6,5 @@
     width: 100vw;
     background-color: rgba(252, 240, 240, 0.425);
 }
+
+  

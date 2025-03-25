@@ -9,16 +9,31 @@ const TaskController = {
             if(!tasks){
                 return res.status(404).json({ message : 'No tasks found for this user!'});
             }
-            console.log("Task with userId:" , tasks);
             return res.status(200).json({ tasks : tasks , message : 'Task successfully retrieved!'});
         }
         catch (error) {
             res.status(500).json({ message : error.message});
         }
     },
+    getTaskById : async function (req, res) {
+        const { id } = req.params;
+        try {
+            const task = await TaskModel.findById(id);
+            if(!task) {
+                return res.status(404).json({ message : 'Task not found!'});
+            }
+            return res.status(200).json({ task : task , message : 'Task successfully retrieved!'});
+        }
+        catch (error) {
+            res.status(500).json({ message : error.message});
+        }
+    },
     createTask : async function (req,res) {
-        const { userId , title , description , completed, dueDate , tags } = req.body;
+        const { title , description , completed, dueDate , tags } = req.body;
         const userAuthenticate = req.user.id;
+        console.log("Task Req Body : " , req.body);   
+        console.log("User Authenticate : " , req.user.id);   
+
         try {
             const user = await UserModel.findById(userAuthenticate);
             if(!user) {
@@ -30,9 +45,11 @@ const TaskController = {
                 title,
                 description,
                 completed,
-                dueDate,
+                dueDate: dueDate ? new Date(dueDate) : null, 
                 tags
             });
+
+            console.log("New Task : " , newTask);   
             const saveNewTask = await newTask.save();
             return res.status(201).json({ newTask : saveNewTask , message : 'Congratz! You create a new task!'});
         }
