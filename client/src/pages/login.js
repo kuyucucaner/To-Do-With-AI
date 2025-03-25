@@ -1,7 +1,7 @@
 import React, { useState ,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/slices/user-slice";
-import "../styles/login.css";
+import "../styles/app.css";
 import { Card, Form, Button, Input , Alert , Spin} from "antd";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
@@ -23,10 +23,10 @@ const Login = () => {
     navigate('/register');
   }
   return (
-    <div className="login-container">
+    <div className="container">
       <Card title="Login" variant="outlined" style={{ textAlign :'center' ,borderRadius: '10px' , boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.34)', padding: '30px' }}>
         <Form
-          name="basic"
+          name="login"
           style={{ maxWidth: 600 }}
           onFinish={handleSubmit}
         >
