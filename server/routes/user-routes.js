@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const UserController = require("../controllers/user-controller");
 const ValidateMiddleware = require("../middlewares/validate-middleware");
-const { body } = require('express-validator');
+const { body } = require("express-validator");
 
 router.post(
   "/register",
@@ -23,15 +23,14 @@ router.post(
   ValidateMiddleware,
   UserController.registerUser
 );
-router.post("/login",
+router.post(
+  "/login",
   [
-    body("userName")
-      .notEmpty()
-      .withMessage("Username cannot be empty!")
-      ,
-    body("password")
-      .notEmpty()
-      .withMessage("Password cannot be empty!")
-  ], UserController.loginUser);
+    body("userName").notEmpty().withMessage("Username cannot be empty!"),
+    body("password").notEmpty().withMessage("Password cannot be empty!"),
+  ],
+  ValidateMiddleware,
+  UserController.loginUser
+);
 
 module.exports = router;
