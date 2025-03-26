@@ -30,10 +30,10 @@ npm install
 
 # Setting Up the .env File for the Server (server/.env)
 
-MONGO_URI=mongodb+srv://playablefactory:playablefactory@todoapp.fq9bv.mongodb.net/?retryWrites=true&w=majority&appName=todoapp
-PORT=5000
-JWT_SECRET=playablefactory
-OPENAI_KEY=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
+- MONGO_URI=mongodb+srv://playablefactory:playablefactory@todoapp.fq9bv.mongodb.net/?retryWrites=true&w=majority&appName=todoapp
+- PORT=5000
+- JWT_SECRET=playablefactory
+OPENAI_KEY=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
 
 
 # Starting the Project
