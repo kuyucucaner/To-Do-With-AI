@@ -1,28 +1,64 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../redux/slices/task-slice";
-import { Card, Form, Button, Input, Alert } from "antd";
+import { Card, Form, Button, Input, Alert, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 const CreateTask = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { error } = useSelector((state) => state.task);
+  const [selectedPhotoFiles, setSelectedPhotoFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
     dueDate: "",
-    imageUrl: "",
-    fileUrl: "",
+    photos: [],
+    files: [],
     tags: [],
   });
+
+  const handlePhotoFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    const validFiles = files.filter(
+      (file) => file.type.startsWith("image/") && file.size < 5 * 1024 * 1024
+    );
+    if (validFiles.length !== files.length) {
+      console.error("Only images under 5MB are allowed!");
+    }
+    setSelectedPhotoFiles(validFiles);
+  };
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    const validFiles = files.filter((file) =>  file.size < 5 * 1024 * 1024);
+    if (validFiles.length !== files.length) {
+      console.error("Only files under 5MB are allowed!");
+    }
+    setSelectedFiles(validFiles);
+  };
+
   const handleSubmit = async (e) => {
-    await dispatch(addTask(taskData));
+    const formData = new FormData();
+    formData.append("title", taskData.title);
+    formData.append("description", taskData.description);
+    formData.append("dueDate", taskData.dueDate);
+    formData.append("tags", JSON.stringify(taskData.tags));
+    selectedPhotoFiles.forEach((file) => {
+      formData.append("photos", file);
+    });
+    selectedFiles.forEach((file) => {
+      formData.append("files", file);
+    });
+    await dispatch(addTask(formData));
     setTaskData({
       title: "",
       description: "",
       dueDate: "",
-      imageUrl: "",
-      fileUrl: "",
+      photos: [],
+      files: [],
       tags: [],
     });
     navigate("/task");
@@ -40,6 +76,7 @@ const CreateTask = () => {
         }}
       >
         <Form
+          encType="multipart/form-data"
           name="create-task-form"
           style={{ maxWidth: 600 }}
           onFinish={handleSubmit}
@@ -47,9 +84,12 @@ const CreateTask = () => {
           <Form.Item
             name="title"
             initialValue={taskData.title}
-            rules={[{ required: true, message: "Please input your task title!" }]}
+            rules={[
+              { required: true, message: "Please input your task title!" },
+            ]}
           >
-            <Input               placeholder="Task Title"
+            <Input
+              placeholder="Task Title"
               onChange={(e) =>
                 setTaskData({ ...taskData, title: e.target.value })
               }
@@ -58,7 +98,12 @@ const CreateTask = () => {
           <Form.Item
             name="description"
             initialValue={taskData.description}
-            rules={[{ required: true, message: "Please input your task description!" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please input your task description!",
+              },
+            ]}
           >
             <Input.TextArea
               placeholder="Task Description"
@@ -80,47 +125,50 @@ const CreateTask = () => {
             />
           </Form.Item>
           <Form.Item
-            name="imageUrl"
-            initialValue={taskData.imageUrl}
-            rules={[{ required: false, message: "Please input the image URL!" }]}
-          >
-            <Input
-              placeholder="Image URL"
-              onChange={(e) =>
-                setTaskData({ ...taskData, imageUrl: e.target.value })
-              }
-            />
-          </Form.Item>
-          <Form.Item
-            name="fileUrl"
-            initialValue={taskData.fileUrl}
-            rules={[{ required: false, message: "Please input the file URL!" }]}
-          >
-            <Input
-              placeholder="File URL"
-              onChange={(e) =>
-                setTaskData({ ...taskData, fileUrl: e.target.value })
-              }
-            />
-          </Form.Item>
-          <Form.Item
             name="tags"
-            initialValue={taskData.tags.join(", ")}
+            initialValue={taskData.tags.length > 0 ? taskData.tags : []}
             rules={[{ required: true, message: "Please input task tags!" }]}
           >
-            <Input
-              placeholder="Tags"
-              onChange={(e) =>
-                setTaskData({ ...taskData, tags: e.target.value.split(",") })
-              }
+            <Select
+              mode="tags"
+              placeholder="Choose tags"
+              onChange={(tags) => setTaskData({ ...taskData, tags })}
             />
           </Form.Item>
+          <Form.Item
+          label="Photo"
+            name="photos"
+            rules={[{ required: false, message: "Please add photo!" }]}
+          >
+            <Input
+              type="file"
+              name="photos"
+              multiple
+              placeholder="photos"
+              onChange={handlePhotoFileChange}
+            />
+          </Form.Item>
+          <Form.Item
+            label="File"
+            name="files"
+            rules={[{ required: false, message: "Please upload a file!" }]}
+          >
+            <Input
+              type="file"
+              name="files"
+              multiple
+              accept=".pdf, .docx, .xlsx, .txt" 
+              placeholder="Choose files"
+              onChange={handleFileChange}
+            />
+          </Form.Item>
+
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
               Create Task
             </Button>
           </Form.Item>
-                  </Form>
+        </Form>
       </Card>
       {error && <Alert message={error} type="error" />}
     </div>

@@ -4,6 +4,7 @@ const TaskController = require("../controllers/task-controller");
 const ValidateMiddleware = require("../middlewares/validate-middleware");
 const AuthMiddleware = require("../middlewares/auth-middleware");
 const { body } = require("express-validator");
+const upload = require("../config/multer");
 //Get all tasks
 router.get("/get-tasks", AuthMiddleware, TaskController.getAllTaskByUserId);
 
@@ -13,6 +14,10 @@ router.get("/get-task/:id", AuthMiddleware, TaskController.getTaskById);
 router.post(
   "/create-task",
   AuthMiddleware,
+  upload.fields([
+    { name: "photos", maxCount: 5 },
+    { name: "files", maxCount: 3 },
+  ]),
   [
     body("title")
       .notEmpty()
@@ -22,10 +27,7 @@ router.post(
       .notEmpty()
       .withMessage("Task description must be provided!")
       .isLength({ max: 255 }),
-    body("dueDate")
-      .notEmpty()
-      .withMessage("Due date must be provided!"),
-    body("tags").isArray({ min: 1 }).withMessage("Task tags cannot be empty!"),
+    body("dueDate").notEmpty().withMessage("Due date must be provided!"),
   ],
   ValidateMiddleware,
   TaskController.createTask
@@ -34,6 +36,10 @@ router.post(
 //Update a task
 router.put(
   "/update-task/:id",
+  upload.fields([
+    { name: "photos", maxCount: 5 },
+    { name: "files", maxCount: 3 },
+  ]),
   [
     body("title")
       .optional()
@@ -45,14 +51,12 @@ router.put(
       .notEmpty()
       .withMessage("Task description must be provided!")
       .isLength({ max: 255 }),
-      body("dueDate")
-      .notEmpty()
-      .withMessage("Due date must be provided!"),
+    body("dueDate").notEmpty().withMessage("Due date must be provided!"),
     body("tags")
       .optional()
       .notEmpty()
       .withMessage("Task tags cannot be empty!"),
-      body("completed")
+    body("completed")
       .optional()
       .isBoolean()
       .withMessage("Completed must be a boolean value"),

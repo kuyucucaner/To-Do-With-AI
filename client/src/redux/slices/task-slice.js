@@ -38,10 +38,15 @@ export const addTask = createAsyncThunk(
       const response = await axios.post(
         "http://localhost:5000/api/v1/task/create-task",
         taskData,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       return response.data;
-    } catch (error) {
+    }  catch (error) {
       return rejectWithValue(error.response.data.message);
     }
   }
@@ -54,7 +59,12 @@ export const updateTask = createAsyncThunk(
       const response = await axios.put(
         `http://localhost:5000/api/v1/task/update-task/${id}`,
         taskData,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       return response.data;
     } catch (error) {
