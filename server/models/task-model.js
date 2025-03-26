@@ -10,8 +10,8 @@ const taskSchema = new mongoose.Schema({
   description: { type: String , required: true},
   completed: { type: Boolean, default: false },
   dueDate: { type: Date , default: Date.now},
-  imageUrl: { type: String },
-  fileUrl: { type: String },
+  photos: { type: [String] , default: []},
+  files: { type: [String] , default: []},
   tags: { type: [String] , default: [] },
   recommendations: { type: [String] },
 },  { timestamps: true } 
