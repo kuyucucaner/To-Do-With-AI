@@ -3,17 +3,24 @@ const UserModel = require("../models/user-model");
 const TaskController = {
   getAllTaskByUserId: async function (req, res) {
     const userId = req.user.id;
-    try {
-      const tasks = await TaskModel.find({ userId });
+    let { page , limit} = req.query;
+
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
+
+    const skip = (page -1) * limit;
+     try {
+      const tasks = await TaskModel.find({ userId }).skip(skip).limit(limit);
+
+      const totalTasks = await TaskModel.countDocuments({userId});
       if (!tasks) {
         return res
           .status(404)
           .json({ message: "No tasks found for this user!" });
       }
-      console.log(tasks);
       return res
         .status(200)
-        .json({ tasks: tasks, message: "Task successfully retrieved!" });
+        .json({ currentPage :page , totalPages : Math.ceil(totalTasks/ limit), totalTasks : totalTasks , tasks: tasks, message: "Task successfully retrieved!" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
