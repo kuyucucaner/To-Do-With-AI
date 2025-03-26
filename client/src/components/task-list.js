@@ -14,8 +14,10 @@ const TaskList = () => {
 
   useEffect(() => {
     dispatch(getTaskByUserId());
+    
   }, [dispatch]);
-
+  
+  console.log(tasks); 
   const handleDelete = async (taskId) => {
    await dispatch(deleteTask(taskId));
    dispatch(getTaskByUserId()); 
