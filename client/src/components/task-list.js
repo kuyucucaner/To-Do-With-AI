@@ -96,7 +96,7 @@ const TaskList = () => {
         placeholder="Search tasks"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        style={{ margin: "20px 0" }}
+        style={{ margin: "20px"  , width :" 150px" }}
       />
         {loading && <p>Loading...</p>}
         {error && <p>{error}</p>}
