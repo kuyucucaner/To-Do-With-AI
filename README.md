@@ -58,6 +58,7 @@ git clone https://github.com/kuyucucaner/todo-app-with-ai.git
 cd todo-app-with-ai
 cd server / npm install
 cd client / npm install
+npm install
 
 ---
 
