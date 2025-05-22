@@ -56,7 +56,8 @@ Clone the repository:
 ```bash
 git clone https://github.com/kuyucucaner/todo-app-with-ai.git
 cd todo-app-with-ai
-npm install
+cd server / npm install
+cd client / npm install
 
 ---
 
