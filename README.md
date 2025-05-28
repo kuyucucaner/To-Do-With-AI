@@ -4,7 +4,7 @@ ToDo App with AI is a full-stack task management application enhanced with **Ope
 It allows users to create and manage their tasks while receiving intelligent suggestions powered by GPT.   
 This application is ideal for personal productivity and task planning, with a clean UI and secure authentication system.
 
----
+--- 
 
 ## 🚀 Features
 
